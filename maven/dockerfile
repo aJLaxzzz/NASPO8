@@ -1,20 +1,9 @@
-# Используем базовый образ с Maven
-FROM maven:latest
+FROM maven:3.8.4-openjdk-8-slim AS build
+COPY src /usr/src/app/src  
+COPY pom.xml /usr/src/app  
+RUN mvn -f /usr/src/app/pom.xml clean package
 
-# Устанавливаем переменную окружения для домашней директории приложения
-ENV APP_HOME /app
-
-# Создаем директорию приложения в контейнере
-RUN mkdir -p $APP_HOME
-
-# Устанавливаем рабочую директорию внутри контейнера
-WORKDIR $APP_HOME
-
-# Копируем все файлы из текущей директории (включая pom.xml) в директорию приложения в контейнере
-COPY . $APP_HOME
-
-# Выполняем сборку приложения с помощью Maven
-RUN mvn package
-
-# Команда для запуска приложения
-CMD ["java", "-jar", "target/docker-maven-1.0-SNAPSHOT.jar"]
+FROM gcr.io/distroless/java  
+COPY --from=build /usr/src/app/target/demo-0.0.1-SNAPSHOT.jar /usr/app/demo-0.0.1-SNAPSHOT.jar  
+EXPOSE 8080  
+ENTRYPOINT ["java","-jar","/usr/app/demo-0.0.1-SNAPSHOT.jar"]
