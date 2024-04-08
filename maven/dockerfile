@@ -1,7 +1,20 @@
+# Используем базовый образ с Maven
 FROM maven:latest
+
+# Устанавливаем переменную окружения для домашней директории приложения
 ENV APP_HOME /app
-RUN mkdor $APP_HOME
-COPY . $APP_HOME
+
+# Создаем директорию приложения в контейнере
+RUN mkdir -p $APP_HOME
+
+# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR $APP_HOME
+
+# Копируем все файлы из текущей директории (включая pom.xml) в директорию приложения в контейнере
+COPY . $APP_HOME
+
+# Выполняем сборку приложения с помощью Maven
 RUN mvn package
-CMD ["java", " - jar", "target/docker-maven-1.0-SNAPSHOT.jar"]
+
+# Команда для запуска приложения
+CMD ["java", "-jar", "target/docker-maven-1.0-SNAPSHOT.jar"]
