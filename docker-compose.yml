@@ -1,11 +1,13 @@
 version: '3'
 services:
-  drupal:
-    image: drupal:latest
+  couchbase:
+    image: couchbase:latest
     ports:
-      - "8080:80"
+      - "8091:8091"
+      - "8092:8092"
+      - "8093:8093"
+      - "11210:11210"
     volumes:
-      - ./drupal/modules:/var/www/html/modules
-      - ./drupal/profiles:/var/www/html/profiles
-      - ./drupal/themes:/var/www/html/themes
-      - ./drupal/sites:/var/www/html/sites
+      - couchbase_data:/opt/couchbase/var
+volumes:
+  couchbase_data:
