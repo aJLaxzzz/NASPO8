@@ -1,4 +1,1 @@
-FROM maven:latest
-WORKDIR /usr/src/app
-COPY . .
-CMD ["mvn", "clean", "install"]
+FROM jenkins/jenkins:latest
