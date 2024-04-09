@@ -1,9 +1,4 @@
-FROM node:latest
-
+FROM maven:latest
 WORKDIR /usr/src/app
-
-COPY . /usr/src/app
-
-EXPOSE 3000
-
-CMD ["node", "app.js"]
+COPY . .
+CMD ["mvn", "clean", "install"]
